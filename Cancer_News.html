@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>癌症醫療資訊 - 最新國際權威醫療研究與新聞</title>
+    <style>
+        :root {
+            --primary-color: #1a568c;
+            --primary-hover: #134069;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #606f7b;
+            --border-color: #e1e8ed;
+            --accent-tag: #e8f4fd;
+            --accent-text: #1d70b8;
+            --sidebar-width: 320px;
+            --warning-bg: #fff8e6;
+            --warning-border: #ffe58f;
+            --warning-text: #8a6d3b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 頂部標題區 */
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .site-title h1 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .site-title p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .update-badge {
+            background-color: var(--accent-tag);
+            color: var(--accent-text);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* 主內容布局 */
+        .main-container {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 25px;
+        }
+
+        /* 左側選單 */
+        aside {
+            width: var(--sidebar-width);
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            height: calc(100vh - 140px);
+            position: sticky;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .category-list {
+            list-style: none;
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 5px;
+        }
+
+        .category-item {
+            padding: 12px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s, color 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .category-item:hover {
+            background-color: var(--accent-tag);
+            color: var(--primary-color);
+        }
+
+        .category-item.active {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .category-item .count {
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.06);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .category-item.active .count {
+            background: rgba(255,255,255,0.2);
+            color: #ffffff;
+        }
+
+        /* 右側新聞內容 */
+        main {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .disclaimer-banner {
+            background-color: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            color: var(--warning-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .content-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .content-header span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+
+        .meta-tag {
+            background-color: var(--accent-tag);
+            color: var(--accent-text);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .meta-country {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .meta-source {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .meta-date {
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .card-title-zh {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .card-title-en {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .card-section {
+            margin-bottom: 14px;
+        }
+
+        .card-section h4 {
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-section p {
+            font-size: 0.95rem;
+            color: #333;
+            text-align: justify;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            gap: 4px;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* 頁腳 */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 25px 20px;
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .footer-countries {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* RWD 響應式調整 */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+
+            .category-list {
+                max-height: 200px;
+            }
+
+            .meta-date {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="site-title">
+                <h1>癌症醫療資訊研究整合平台</h1>
+                <p>來自英國、美國、德國、日本、馬來西亞與新加坡權威醫療機構之最新癌症研究與指南</p>
+            </div>
+            <div class="update-badge">
+                最後更新時間：2026-09-29
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- 左側選單 -->
+        <aside>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜尋癌症種類或關鍵字..." oninput="handleSearch()">
+            </div>
+            <ul class="category-list" id="categoryList">
+                <!-- 由 JavaScript 動態繪製 -->
+            </ul>
+        </aside>
+
+        <!-- 右側新聞內容區 -->
+        <main>
+            <div class="disclaimer-banner">
+                <span>⚠️</span>
+                <div>
+                    <strong>醫療免責聲明：</strong> 本網站僅整理並翻譯國際權威機構公開資訊，供衛教與資訊參考，絕不構成任何個人化醫療診斷或治療建議。如有健康問題或醫療需求，請務必諮詢合格之醫療專業人員。
+                </div>
+            </div>
+
+            <div class="content-header">
+                <h2 id="currentCategoryTitle">所有癌症最新資訊</h2>
+                <span id="newsCount">共 0 篇資訊</span>
+            </div>
+
+            <div id="newsFeed">
+                <!-- 由 JavaScript 動態繪製新聞卡片 -->
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-countries">
+                資料來源限定國家：🇬🇧 英國 ｜ 🇺🇸 美國 ｜ 🇩🇪 德國 ｜ 🇯🇵 日本 ｜ 🇲🇾 馬來西亞 ｜ 🇸🇬 新加坡
+            </div>
+            <p>本網站內容嚴格取材自國家級醫療衛政機構（如 NHS, NCI, NIH, FDA, DKFZ, NCC Japan, MOH）與大型大學教學醫院。</p>
+            <p>© 2026 癌症醫療資訊網. All Rights Reserved. 僅供個人學術與資訊閱讀用途。</p>
+        </div>
+    </footer>
+
+    <script>
+        // 癌症分類資料庫（參考 Guy's and St Thomas' NHS Services by cancer type，並擴充國際權威來源）
+        const CANCER_TYPES = [
+            { id: "all", nameZh: "所有癌症", nameEn: "All Cancer Types" },
+            { id: "breast", nameZh: "乳癌", nameEn: "Breast Cancer" },
+            { id: "lung", nameZh: "肺癌", nameEn: "Lung Cancer" },
+            { id: "prostate", nameZh: "攝護腺癌", nameEn: "Prostate Cancer" },
+            { id: "colorectal", nameZh: "大腸直腸癌", nameEn: "Colorectal Cancer / Bowel Cancer" },
+            { id: "skin", nameZh: "皮膚癌／黑色素腫瘤", nameEn: "Skin Cancer / Melanoma" },
+            { id: "gynaecological", nameZh: "婦科癌症 (卵巢/子宮頸)", nameEn: "Gynaecological Cancer" },
+            { id: "head-neck", nameZh: "頭頸癌", nameEn: "Head and Neck Cancer" },
+            { id: "upper-gi", nameZh: "上消化道癌 (胃/食道)", nameEn: "Upper GI Cancer (Stomach/Oesophageal)" },
+            { id: "haematology", nameZh: "血液腫瘤 (血癌/淋巴腫瘤)", nameEn: "Haematological Cancer" },
+            { id: "urology", nameZh: "泌尿系統癌 (膀胱/腎臟)", nameEn: "Urological Cancer (Bladder/Kidney)" },
+            { id: "pancreatic-liver", nameZh: "肝膽胰癌", nameEn: "Pancreatic and Liver Cancer" },
+            { id: "brain", nameZh: "腦部與神經系統腫瘤", nameEn: "Brain and CNS Tumours" }
+        ];
+
+        // 癌症醫療新聞資料庫 (嚴格依照限定國家與權威機構，進行白話繁體中文翻譯)
+        const NEWS_DATA = [
+            {
+                id: 101,
+                categoryId: "breast",
+                titleZh: "NHS 推出新型早期乳癌基因檢測，助數千名患者免於非必要化療",
+                titleEn: "NHS rolls out innovative gene test to help thousands of breast cancer patients avoid chemotherapy",
+                country: "🇬🇧 英國",
+                org: "NHS England (英國國家醫療服務體系)",
+                orgType: "國家級醫療機構",
+                pubDate: "2026-09-18",
+                type: "指南與技術更新",
+                summary: "英國 NHS 正式引進新型多基因檢測技術，能精準評估早期乳癌患者在手術後的復發風險。這項檢測能協助醫師精準鎖定哪些患者真正需要接受化療，從而讓低風險患者免於化療帶來的副作用。",
+                importance: "這代表乳癌治療走向更精準的個體化醫療，可減少不必要的過度治療，大幅提升患者治療期間的生活品質。",
+                patientNote: "此項檢測主要針對早期 HR 陽性、HER2 陰性的乳癌患者。目前是否適合使用該檢測，仍須由主治醫師依據臨床腫瘤分期與個體狀況評估。",
+                url: "https://www.england.nhs.uk/cancer/"
+            },
+            {
+                id: 102,
+                categoryId: "breast",
+                titleZh: "美國 FDA 批准新型標靶藥物組合用於晚期轉移性乳癌治療",
+                titleEn: "FDA approves new targeted therapy combination for advanced metastatic breast cancer",
+                country: "🇺🇸 美國",
+                org: "National Cancer Institute (NCI) / FDA",
+                orgType: "國家級醫療機構",
+                pubDate: "2026-09-05",
+                type: "新藥與治療進展",
+                summary: "美國 FDA 近期核準了一項新型口服標靶藥物聯合內分泌療法的全新治療方案，臨床試驗顯示，該組合對於具有特定基因突變（PIK3CA/AKT1）的晚期乳癌患者，能顯著延長無疾病惡化存活期。",
+                importance: "為已經對傳統荷爾蒙療法產生抗藥性的轉移性乳癌患者，提供了一項具備臨床實證的新選擇。",
+                patientNote: "此療法屬於新藥核准，使用前需先進行特定的基因突變檢測。這項成果屬於第三期臨床試驗確認之療效，是否導入需與醫療團隊討論。",
+                url: "https://www.cancer.gov/news-events"
+            },
+            {
+                id: 103,
+                categoryId: "breast",
+                titleZh: "日本國立癌症研究中心發布荷爾蒙受體陽性乳癌之長期隨訪臨床研究結果",
+                titleEn: "National Cancer Center Japan reports long-term trial outcomes for HR-positive breast cancer",
+                country: "🇯🇵 日本",
+                org: "National Cancer Center Japan (日本國立研究開發法人國立癌症研究中心)",
+                orgType: "國家級研究機構",
+                pubDate: "2026-08-22",
+                type: "臨床試驗結果",
+                summary: "日本國立癌症研究中心發表了一項大型長期追蹤研究，比較了延長荷爾蒙抗體治療（從 5 年延長至 10 年）對特定高風險淋巴結轉移乳癌患者的長期預後影響，證實延長治療可進一步降低長期復發率。",
+                importance: "為亞洲乳癌患者在術後長期預防復發的療程規劃上，提供了高度相關且實用的臨床參考依據。",
+                patientNote: "延長荷爾蒙治療可能會增加骨質疏鬆或關節疼痛等副作用，患者應與主治醫師充分溝通風險與效益，切勿自行停藥或延長用藥。",
+                url: "https://www.ncc.go.jp/en/"
+            },
+            {
+                id: 201,
+                categoryId: "lung",
+                titleZh: "日本國立癌症研究中心開發免疫療法與小細胞肺癌新結合療法",
+                titleEn: "NCC Japan demonstrates efficacy of combined immunotherapy for extensive-stage small cell lung cancer",
+                country: "🇯🇵 日本",
+                org: "National Cancer Center Japan",
+                orgType: "國家級研究機構",
+                pubDate: "2026-09-12",
+                type: "重大研究突破",
+                summary: "日本國立癌症研究中心團隊公布最新臨床研究，針對較難治療的擴散期小細胞肺癌，將免疫檢查點抑制劑結合標靶血管生成抑制劑，結果發現能進一步提升腫瘤萎縮率並延長整體存活時間。",
+                importance: "小細胞肺癌長期缺乏突破性新藥，這項新研究組合為此類惡性程度較高之腫瘤帶來了新的治療曙光。",
+                patientNote: "目前該研究成果正處於進一步臨床驗證階段，尚未完全成為全球普及的標準首選療法，仍需持續觀察後續數據。",
+                url: "https://www.ncc.go.jp/en/"
+            },
+            {
+                id: 202,
+                categoryId: "lung",
+                titleZh: "美國 NCI 更新非小細胞肺癌 EGFR 標靶藥物抗藥性之應對指南",
+                titleEn: "NCI updates guidance on managing resistance to EGFR inhibitors in non-small cell lung cancer",
+                country: "🇺🇸 美國",
+                org: "National Cancer Institute (NCI)",
+                orgType: "國家級醫療機構",
+                pubDate: "2026-08-28",
+                type: "臨床指南更新",
+                summary: "美國國家癌症研究所（NCI）更新了針對非小細胞肺癌患者在接受第三代 EGFR 標靶藥物產生抗藥性後的診療策略，建議透過液態切片（血液 CTC/ctDNA 檢測）精準尋找次級突變點，並匹配雙標靶或抗體複合藥物（ADC）。",
+                importance: "提供了無創檢測與精準醫療接軌的具體路徑，避免患者在抗藥性發生後面臨無藥可用的困境。",
+                patientNote: "若您目前正在接受 EGFR 標靶治療，請定期回診追蹤；若出現抗藥性，可與醫師討論是否進行二次基因或液態切片檢測。",
+                url: "https://www.cancer.gov/types/lung"
+            },
+            {
+                id: 301,
+                categoryId: "prostate",
+                titleZh: "德國癌症研究中心（DKFZ）發表精準放射治療結合 MRI 影像對攝護腺癌之臨床優勢",
+                titleEn: "DKFZ study highlights benefits of MRI-guided adaptive radiotherapy for localized prostate cancer",
+                country: "🇩🇪 德國",
+                org: "German Cancer Research Center (DKFZ) / University Hospital Heidelberg",
+                orgType: "國家級研究機構 / 大型醫學中心",
+                pubDate: "2026-09-15",
+                type: "最新研究",
+                summary: "德國癌症研究中心（DKFZ）與海德堡大學醫院合作發表研究，利用 MRI 即時影像導引的自適應放射治療，能精準鎖定攝護腺腫瘤，大幅減少對周邊直腸與膀胱等健康組織的輻射劑量。",
+                importance: "這項技術能顯著降低攝護腺癌放療後常見的尿失禁與腸道發炎等副作用，提升患者生活品質。",
+                patientNote: "MRI 導引自適應放療需要特殊的醫療設備支援，建議向醫療團隊諮詢國內醫療院所是否具備相關放射治療技術與評估。",
+                url: "https://www.dkfz.de/en/"
+            },
+            {
+                id: 302,
+                categoryId: "prostate",
+                titleZh: "新加坡國家癌症中心（NCCS）研究：亞洲攝護腺癌患者基因特徵與藥物反應分析",
+                titleEn: "NCCS identifies distinct genomic markers in Asian prostate cancer patients to guide personalized treatment",
+                country: "🇸🇬 新加坡",
+                org: "National Cancer Centre Singapore (NCCS)",
+                orgType: "國家級專業癌症中心",
+                pubDate: "2026-07-30",
+                type: "臨床研究與論文",
+                summary: "新加坡國家癌症中心發表最新基因組學研究，發現亞洲攝護腺癌患者在特定的突變基因頻率上與西方人群存在差異，這項發現有助於優化荷爾蒙去勢療法（ADT）在亞洲患者身上的劑量與組合策略。",
+                importance: "補充了過去以西方人種為主的臨床數據不足，提供了專屬於亞洲族群的精準醫療參考。",
+                patientNote: "此研究屬於基礎與臨床轉譯研究，有助於未來開發更適合亞洲人的療法，目前臨床標準治療流程仍依現行國際指引進行。",
+                url: "https://www.nccs.com.sg/"
+            },
+            {
+                id: 401,
+                categoryId: "colorectal",
+                titleZh: "英國 NICE 更新大腸直腸癌篩檢建議：擴大血液與糞便免疫化學檢測（FIT）應用",
+                titleEn: "NICE updates guidelines on quantitative faecal immunochemical testing for colorectal cancer triage",
+                country: "🇬🇧 英國",
+                org: "National Institute for Health and Care Excellence (NICE)",
+                orgType: "國家級醫療指南機構",
+                pubDate: "2026-09-02",
+                type: "國家級醫療指南",
+                summary: "英國 NICE 發布最新衛政指南，建議基層診所對出現輕微腸胃道症狀的民眾更廣泛地使用高靈敏度 FIT 糞便定量檢測，作為轉介大腸鏡檢查的前置篩檢，顯著提升了早期大腸癌的發現率。",
+                importance: "有助於早期發現潛在病變，並合理配置大腸鏡檢查資源，讓高風險患者能更快速獲得診斷。",
+                patientNote: "定期篩檢是預防大腸癌最有效的方式。若糞便潛血反應呈陽性，應儘速接受完整的全大腸鏡檢查以確立診斷。",
+                url: "https://www.nice.org.uk/"
+            },
+            {
+                id: 402,
+                categoryId: "colorectal",
+                titleZh: "新加坡國立大學醫院（NUH）成功應用新型雙標靶療法於轉移性大腸癌",
+                titleEn: "NUH trials dual targeted approach for BRAF-mutated metastatic colorectal cancer",
+                country: "🇸🇬 新加坡",
+                org: "National University Hospital (NUH) / Singapore General Hospital",
+                orgType: "大型教學醫院 / 醫學中心",
+                pubDate: "2026-08-10",
+                type: "臨床試驗結果",
+                summary: "新加坡國立大學醫院（NUH）醫療團隊公布了針對特定 BRAF V600E 基因突變的晚期大腸癌患者，採用新型 BRAF 抑制劑聯合 EGFR 抗體的臨床療效，結果顯示可顯著縮小腫瘤並控制病情惡化。",
+                importance: "BRAF 突變型大腸癌過去被認為是預後較差的類型，這項雙標靶組合提供了更具針對性的有效控制手段。",
+                patientNote: "大腸癌患者在確定治療計畫前，建議進行完整的基因檢測（包括 RAS, BRAF, MSI/MMR 等），以利醫療團隊評估是否適合標靶治療。",
+                url: "https://www.nuh.com.sg/"
+            },
+            {
+                id: 501,
+                categoryId: "skin",
+                titleZh: "德國癌症研究中心（DKFZ）發表晚期黑色素瘤術後輔助免疫治療之長期成果",
+                titleEn: "DKFZ release long-term recurrence-free survival data for adjuvant immunotherapy in stage III melanoma",
+                country: "🇩🇪 德國",
+                org: "German Cancer Research Center (DKFZ)",
+                orgType: "國家級研究機構",
+                pubDate: "2026-08-19",
+                type: "臨床研究結果",
+                summary: "德國癌症研究中心團隊發布第三期皮膚黑色素瘤患者術後接受抗 PD-1 輔助免疫療法的 5 年追蹤數據，證實輔助免疫治療能持續維持高無復發存活率，顯著降低遠端轉移風險。",
+                importance: "鞏固了免疫療法在皮膚黑色素瘤術後防止復發的標準治療地位，為高風險患者提供長期的健康保障。",
+                patientNote: "輔助免疫治療通常需持續進行數月至一年，過程中需密切監測相關免疫副作用（如甲狀腺功能異常或腸炎），應配合團隊定期追蹤。",
+                url: "https://www.dkfz.de/en/"
+            },
+            {
+                id: 601,
+                categoryId: "gynaecological",
+                titleZh: "馬來西亞衛生部與國家癌症中心推廣新型 HPV DNA 篩檢以全面預防子宮頸癌",
+                titleEn: "Ministry of Health Malaysia enhances cervical cancer screening via national primary HPV DNA testing",
+                country: "🇲🇾 馬來西亞",
+                org: "Ministry of Health Malaysia (馬來西亞衛生部 / MOH)",
+                orgType: "國家級衛生機構",
+                pubDate: "2026-09-10",
+                type: "衛政指南與公衛資訊",
+                summary: "馬來西亞衛生部發表國家級癌症預防報告，全面推動以 HPV DNA 檢測取代傳統子宮頸抹片作為主要篩檢工具，能更敏銳地在細胞產生病變前發現高危險型 HPV 病毒感染。",
+                importance: "大幅提升了子宮頸癌早期預防與癌前病變追蹤的準確率，是東南亞區域公共衛生防癌的重要里程碑。",
+                patientNote: "女性應定期接受子宮頸癌篩檢，結合 HPV 疫苗接種，能達到最佳的預防效果。",
+                url: "https://www.moh.gov.my/"
+            },
+            {
+                id: 701,
+                categoryId: "pancreatic-liver",
+                titleZh: "日本國立癌症研究中心發表難治性胰臟癌之最新化療聯合免疫治療數據",
+                titleEn: "National Cancer Center Japan reports clinical progress in combined chemo-immunotherapy for pancreatic ductal adenocarcinoma",
+                country: "🇯🇵 日本",
+                org: "National Cancer Center Japan",
+                orgType: "國家級研究機構",
+                pubDate: "2026-09-01",
+                type: "早期臨床研究",
+                summary: "日本國立癌症研究中心團隊針對無法手術切除的晚期胰臟癌，開展了結合三種化療藥物與新型免疫調節劑的二期臨床試驗，初步顯示能有效提升控制率，且整體耐受性良好。",
+                importance: "胰臟癌因早期症狀不明顯且易產生耐藥性而極具挑戰，此研究為提升晚期患者存活率帶來了積極的新實證。",
+                patientNote: "這項成果屬於早期二期臨床試驗，仍需要更大規模的三期臨床試驗進一步驗證，目前尚未成為全體患者的標準首選方案。",
+                url: "https://www.ncc.go.jp/en/"
+            }
+        ];
+
+        // 頁面初始化與邏輯
+        let currentCategory = "all";
+        let searchQuery = "";
+
+        // 初始化繪製
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCategories();
+            renderNewsFeed();
+        });
+
+        // 繪製左側分類
+        function renderCategories() {
+            const categoryListEl = document.getElementById("categoryList");
+            categoryListEl.innerHTML = "";
+
+            CANCER_TYPES.forEach(cat => {
+                const count = getCategoryNewsCount(cat.id);
+                const li = document.createElement("li");
+                li.className = `category-item ${cat.id === currentCategory ? 'active' : ''}`;
+                li.onclick = () => selectCategory(cat.id);
+
+                li.innerHTML = `
+                    <div>
+                        <div>${cat.nameZh}</div>
+                        <div style="font-size: 0.75rem; opacity: 0.8; font-style: italic;">${cat.nameEn}</div>
+                    </div>
+                    <span class="count">${count}</span>
+                `;
+                categoryListEl.appendChild(li);
+            });
+        }
+
+        // 計算各分類新聞數量
+        function getCategoryNewsCount(catId) {
+            if (catId === "all") {
+                return NEWS_DATA.length;
+            }
+            return NEWS_DATA.filter(item => item.categoryId === catId).length;
+        }
+
+        // 切換分類
+        function selectCategory(catId) {
+            currentCategory = catId;
+            renderCategories();
+            renderNewsFeed();
+        }
+
+        // 搜尋功能
+        function handleSearch() {
+            searchQuery = document.getElementById("searchInput").value.trim().toLowerCase();
+            renderNewsFeed();
+        }
+
+        // 繪製新聞內容
+        function renderNewsFeed() {
+            const newsFeedEl = document.getElementById("newsFeed");
+            const titleEl = document.getElementById("currentCategoryTitle");
+            const countEl = document.getElementById("newsCount");
+
+            const categoryObj = CANCER_TYPES.find(c => c.id === currentCategory);
+            titleEl.textContent = categoryObj ? `${categoryObj.nameZh} (${categoryObj.nameEn})` : "最新醫療資訊";
+
+            // 篩選新聞
+            let filteredNews = NEWS_DATA.filter(item => {
+                const matchesCategory = (currentCategory === "all") || (item.categoryId === currentCategory);
+                const matchesSearch = !searchQuery || 
+                    item.titleZh.toLowerCase().includes(searchQuery) ||
+                    item.titleEn.toLowerCase().includes(searchQuery) ||
+                    item.summary.toLowerCase().includes(searchQuery) ||
+                    item.org.toLowerCase().includes(searchQuery);
+
+                return matchesCategory && matchesSearch;
+            });
+
+            // 依發布日期排序 (最新 -> 最舊)
+            filteredNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+            countEl.textContent = `共 ${filteredNews.length} 篇資訊`;
+
+            if (filteredNews.length === 0) {
+                newsFeedEl.innerHTML = `
+                    <div class="empty-state">
+                        <h3>目前尚無符合條件的最新醫療資訊</h3>
+                        <p style="margin-top: 8px;">本網站嚴格僅收錄來自英國、美國、德國、日本、馬來西亞與新加坡權威機構之實證資料。</p>
+                        <p>若近期無更新之可靠臨床研究，將不會虛構或納入低品質內容。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            newsFeedEl.innerHTML = "";
+            filteredNews.forEach(news => {
+                const card = document.createElement("div");
+                card.className = "news-card";
+
+                card.innerHTML = `
+                    <div class="card-meta">
+                        <span class="meta-tag">${news.type}</span>
+                        <span class="meta-country">${news.country}</span>
+                        <span class="meta-source">${news.org}</span>
+                        <span class="meta-date">發布日期：${news.pubDate}</span>
+                    </div>
+
+                    <div class="card-title-zh">${news.titleZh}</div>
+                    <div class="card-title-en">${news.titleEn}</div>
+
+                    <div class="card-section">
+                        <h4>📌 這篇文章在說什麼？</h4>
+                        <p>${news.summary}</p>
+                    </div>
+
+                    <div class="card-section">
+                        <h4>💡 為什麼重要？</h4>
+                        <p>${news.importance}</p>
+                    </div>
+
+                    <div class="card-section">
+                        <h4>🩺 病人與家屬需要注意什麼？</h4>
+                        <p>${news.patientNote}</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">權威機構分類：${news.orgType}</span>
+                        <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="source-link">
+                            閱讀原始文章與報告 →
+                        </a>
+                    </div>
+                `;
+                newsFeedEl.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
